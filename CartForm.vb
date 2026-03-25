@@ -37,13 +37,13 @@ Public Class CartForm
     ' ================= LOAD CART =================
     Public Sub LoadCart()
         Try
-            Connect() ' ✅ uses shared Module Connect()
+            Connect() '  uses shared Module Connect()
 
             Dim query As String = "SELECT CartID, MedicineID, MedicineName, Price, Quantity, Total 
                                    FROM Cart 
                                    WHERE UserID = @uid"
 
-            Dim da As New SqlDataAdapter(query, con) ' ✅ uses shared Module con
+            Dim da As New SqlDataAdapter(query, con) '  uses shared Module con
             da.SelectCommand.Parameters.AddWithValue("@uid", currentUserID)
 
             Dim dt As New DataTable()
@@ -87,7 +87,7 @@ Public Class CartForm
         Try
             Connect()
 
-            ' ✅ Check stock before increasing
+            ' Check stock before increasing
             Dim stockCmd As New SqlCommand("SELECT Quantity FROM Medicines WHERE MedicineID = @id", con)
             stockCmd.Parameters.AddWithValue("@id", medID)
             Dim stock As Integer = Convert.ToInt32(stockCmd.ExecuteScalar())
@@ -128,7 +128,7 @@ Public Class CartForm
             Connect()
 
             If qty <= 1 Then
-                ' ✅ Remove item if quantity reaches 1
+                '  Remove item if quantity reaches 1
                 Dim delCmd As New SqlCommand("DELETE FROM Cart WHERE CartID = @id", con)
                 delCmd.Parameters.AddWithValue("@id", cartID)
                 delCmd.ExecuteNonQuery()
@@ -199,50 +199,7 @@ Public Class CartForm
         End Try
     End Sub
 
-    ' ================= CHECKOUT =================
-    'Private Sub btnCheckout_Click(sender As Object, e As EventArgs) Handles btnCheckout.Click
-    '    If dgvCart.Rows.Count = 0 Then
-    '        MessageBox.Show("Your cart is empty.", "Empty Cart", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-    '        Exit Sub
-    '    End If
 
-    '    Dim confirm As DialogResult = MessageBox.Show("Confirm checkout?", "Checkout", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-    '    If confirm = DialogResult.No Then Exit Sub
-
-    '    Try
-    '        Connect()
-
-    '        ' ✅ Reduce stock in Medicines table
-    '        Dim updateStock As New SqlCommand("
-    '            UPDATE M
-    '            SET M.Quantity = M.Quantity - C.Quantity
-    '            FROM Medicines M
-    '            INNER JOIN Cart C ON M.MedicineID = C.MedicineID
-    '            WHERE C.UserID = @uid", con)
-    '        updateStock.Parameters.AddWithValue("@uid", currentUserID)
-    '        updateStock.ExecuteNonQuery()
-
-    '        con.Close()
-
-    '        ' ✅ Open Bill Form and pass UserID
-    '        Dim bill As New BillForm()
-    '        bill.currentUserID = currentUserID
-    '        bill.currentUserName = currentUserName
-    '        bill.Show()
-
-    '        ' ✅ Clear cart after checkout
-    '        Connect()
-    '        Dim clearCart As New SqlCommand("DELETE FROM Cart WHERE UserID = @uid", con)
-    '        clearCart.Parameters.AddWithValue("@uid", currentUserID)
-    '        clearCart.ExecuteNonQuery()
-    '        con.Close()
-
-    '        LoadCart()
-
-    '    Catch ex As Exception
-    '        MessageBox.Show(ex.Message)
-    '    End Try
-    'End Sub
 
     Private Sub btnCheckout_Click(sender As Object, e As EventArgs) Handles btnCheckout.Click
         If dgvCart.Rows.Count = 0 Then
@@ -253,7 +210,7 @@ Public Class CartForm
         Dim confirm As DialogResult = MessageBox.Show("Confirm checkout?", "Checkout", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If confirm = DialogResult.No Then Exit Sub
 
-        ' ✅ Just open BillForm - BillForm handles stock reduction, payment and cart clearing
+        '  Just open BillForm - BillForm handles stock reduction, payment and cart clearing
         Dim bill As New BillForm()
         bill.currentUserID = currentUserID
         bill.currentUserName = currentUserName

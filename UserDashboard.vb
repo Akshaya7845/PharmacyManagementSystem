@@ -3,7 +3,7 @@
 Public Class UserDashboard
 
     Public LoggedInUserName As String
-    Public LoggedInUserID As Integer  ' ✅ ADD THIS
+    Public LoggedInUserID As Integer  ' ADD THIS
 
     Private Sub UserDashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lblWelcomeUser.Text = "Welcome " & LoggedInUserName
@@ -20,21 +20,18 @@ Public Class UserDashboard
 
     Private Sub btnViewMedicines_Click(sender As Object, e As EventArgs) Handles btnViewMedicines.Click
         Dim frm As New ViewMedicinesForm()
-        frm.currentUserID = LoggedInUserID  ' ✅ PASS USER ID
+        frm.currentUserID = LoggedInUserID  ' PASS USER ID
         LoadForm(frm)
     End Sub
 
     Private Sub btnCart_Click(sender As Object, e As EventArgs) Handles btnCart.Click
         Dim frm As New CartForm()
-        frm.currentUserID = LoggedInUserID  ' ✅ PASS USER ID
+        frm.currentUserID = LoggedInUserID  ' PASS USER ID
         frm.currentUserName = LoggedInUserName
         LoadForm(frm)
     End Sub
 
-    'Private Sub btnHistory_Click(sender As Object, e As EventArgs) Handles btnHistory.Click
-    '    Dim frm As New PurchaseHistoryForm()
-    '    LoadForm(frm)
-    'End Sub
+
 
     Private Sub btnHistory_Click(sender As Object, e As EventArgs) Handles btnHistory.Click
         Dim frm As New PurchaseHistoryForm()
@@ -43,9 +40,7 @@ Public Class UserDashboard
         LoadForm(frm)
     End Sub
 
-    'Private Sub btnDashboard_Click(sender As Object, e As EventArgs) Handles btnDashboard.Click
-    '    PanelMain.Controls.Clear()
-    'End Sub
+
     Private Sub btnDashboard_Click(sender As Object, e As EventArgs) Handles btnDashboard.Click
         Dim frm As New UserDashboardHome()
         frm.currentUserID = LoggedInUserID

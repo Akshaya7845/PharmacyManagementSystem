@@ -3,17 +3,21 @@
 Public Class AdminDashboard
     Public AdminName As String
 
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnAddAdmin.Click
-
-    End Sub
-
+    ' ================= FORM LOAD =================
     Private Sub AdminDashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        ' Logout button position
         btnLogout.Top = panelSidebar.Height - btnLogout.Height - 20
+
+        ' Welcome text
         lblWelcome.Text = "Welcome, " & AdminName
 
+        ' LOAD DASHBOARD HOME 
+        LoadFormInPanel(New AdminDashboardHome())
+
     End Sub
 
+    ' ================= LOAD FORM FUNCTION =================
     Private Sub LoadFormInPanel(frm As Form)
 
         MainPanel.Controls.Clear()
@@ -25,6 +29,12 @@ Public Class AdminDashboard
         MainPanel.Controls.Add(frm)
         frm.Show()
 
+    End Sub
+
+    ' ================= BUTTON EVENTS =================
+
+    Private Sub btnDashboard_Click(sender As Object, e As EventArgs) Handles btnDashboard.Click
+        LoadFormInPanel(New AdminDashboardHome())
     End Sub
 
     Private Sub btnViewRequests_Click(sender As Object, e As EventArgs) Handles btnViewRequests.Click
@@ -43,32 +53,31 @@ Public Class AdminDashboard
         LoadFormInPanel(New HistoryForm())
     End Sub
 
+    ' ================= LOGOUT =================
     Private Sub btnLogout_Click(sender As Object, e As EventArgs) Handles btnLogout.Click
 
-        If MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.No Then
+        If MessageBox.Show("Are you sure you want to logout?", "Logout",
+                           MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.No Then
             Exit Sub
         End If
-
 
         Try
             If LoginForm.CurrentAdminID <> 0 Then
                 LogHistory(LoginForm.CurrentAdminID, "Logout", "Admin logged out")
             End If
         Catch ex As Exception
-
+            ' ignore
         End Try
 
-
         Dim login As New LoginForm()
-
 
         login.txtUsername.Text = ""
         login.txtPassword.Text = ""
 
         login.Show()
 
-
         Me.Close()
 
     End Sub
+
 End Class

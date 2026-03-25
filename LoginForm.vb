@@ -81,10 +81,10 @@ Public Class LoginForm
                             ' ===== USER LOGIN =====
                         Else
 
-                            ' ✅ Get real UserID from database
+                            '  Get real UserID from database
                             Dim userID As Integer = Convert.ToInt32(reader("UserID"))
 
-                            ' ✅ Get name from email (remove @gmail.com part)
+                            '  Get name from email (remove @gmail.com part)
                             Dim email As String = txtUsername.Text.Trim()
                             Dim nameOnly As String = email
                             If email.Contains("@") Then
@@ -93,10 +93,10 @@ Public Class LoginForm
 
                             MessageBox.Show("User Login Successful! Welcome " & nameOnly, "Login", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                            ' ✅ Open Dashboard and pass UserID + UserName
+                            '  Open Dashboard and pass UserID + UserName
                             Dim userDash As New UserDashboard()
                             userDash.LoggedInUserName = nameOnly
-                            userDash.LoggedInUserID = userID  ' ✅ THIS IS THE KEY FIX
+                            userDash.LoggedInUserID = userID  '  THIS IS THE KEY FIX
 
                             userDash.Show()
                             Me.Hide()
