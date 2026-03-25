@@ -1,7 +1,7 @@
 ﻿'Imports System.Data.SqlClient
 'Imports System.Windows.Forms
 'Imports System.IO
-'Imports System.Drawing   ' ✅ IMPORTANT
+'Imports System.Drawing
 
 'Public Class ManageMedicinesForm
 
@@ -32,7 +32,6 @@
 '            da.Fill(dt)
 '            dgvMedicines.DataSource = dt
 
-'            ' ✅ Add Image Column only once
 '            If Not dgvMedicines.Columns.Contains("ImagePreview") Then
 '                Dim imgCol As New DataGridViewImageColumn()
 '                imgCol.Name = "ImagePreview"
@@ -41,7 +40,6 @@
 '                dgvMedicines.Columns.Add(imgCol)
 '            End If
 
-'            ' ✅ Load Images safely (no file lock)
 '            For Each row As DataGridViewRow In dgvMedicines.Rows
 '                If row.Cells("ImagePath").Value IsNot Nothing Then
 '                    Dim path As String = row.Cells("ImagePath").Value.ToString()
@@ -78,6 +76,9 @@
 '            cmd.Parameters.AddWithValue("@img", txtImage.Text)
 
 '            cmd.ExecuteNonQuery()
+
+'            '  HISTORY LOG
+'            LogHistory(LoginForm.CurrentAdminID, "Add", "Added Medicine: " & txtName.Text)
 
 '            MessageBox.Show("Medicine Added Successfully")
 '            LoadMedicines()
@@ -127,6 +128,9 @@
 
 '            cmd.ExecuteNonQuery()
 
+'            ' 🔥 HISTORY LOG
+'            LogHistory(LoginForm.CurrentAdminID, "Update", "Updated Medicine: " & txtName.Text)
+
 '            MessageBox.Show("Medicine Updated")
 '            LoadMedicines()
 
@@ -155,6 +159,9 @@
 
 '            cmd.ExecuteNonQuery()
 
+'            '  HISTORY LOG
+'            LogHistory(LoginForm.CurrentAdminID, "Delete", "Deleted Medicine ID: " & id)
+
 '            MessageBox.Show("Medicine Deleted")
 '            LoadMedicines()
 
@@ -174,6 +181,7 @@
 '    End Sub
 
 'End Class
+
 Imports System.Data.SqlClient
 Imports System.Windows.Forms
 Imports System.IO
@@ -192,7 +200,23 @@ Public Class ManageMedicinesForm
         ofd.Filter = "Image Files|*.jpg;*.png;*.jpeg"
 
         If ofd.ShowDialog() = DialogResult.OK Then
-            txtImage.Text = ofd.FileName
+
+            Dim fileName As String = Path.GetFileName(ofd.FileName)
+            Dim imagesFolder As String = Application.StartupPath & "\Images\"
+
+            ' Create folder if not exists
+            If Not Directory.Exists(imagesFolder) Then
+                Directory.CreateDirectory(imagesFolder)
+            End If
+
+            Dim destPath As String = imagesFolder & fileName
+
+            ' Copy image into project folder
+            File.Copy(ofd.FileName, destPath, True)
+
+            ' Store ONLY filename
+            txtImage.Text = fileName
+
         End If
     End Sub
 
@@ -208,6 +232,7 @@ Public Class ManageMedicinesForm
             da.Fill(dt)
             dgvMedicines.DataSource = dt
 
+            ' Add image column if not exists
             If Not dgvMedicines.Columns.Contains("ImagePreview") Then
                 Dim imgCol As New DataGridViewImageColumn()
                 imgCol.Name = "ImagePreview"
@@ -216,15 +241,20 @@ Public Class ManageMedicinesForm
                 dgvMedicines.Columns.Add(imgCol)
             End If
 
+            ' Load images
             For Each row As DataGridViewRow In dgvMedicines.Rows
-                If row.Cells("ImagePath").Value IsNot Nothing Then
-                    Dim path As String = row.Cells("ImagePath").Value.ToString()
 
-                    If File.Exists(path) Then
-                        Using fs As New FileStream(path, FileMode.Open, FileAccess.Read)
+                If Not row.IsNewRow AndAlso row.Cells("ImagePath").Value IsNot Nothing Then
+
+                    Dim imgFile As String = row.Cells("ImagePath").Value.ToString()
+                    Dim fullPath As String = Application.StartupPath & "\Images\" & imgFile
+
+                    If File.Exists(fullPath) Then
+                        Using fs As New FileStream(fullPath, FileMode.Open, FileAccess.Read)
                             row.Cells("ImagePreview").Value = Image.FromStream(fs)
                         End Using
                     End If
+
                 End If
             Next
 
@@ -247,13 +277,13 @@ Public Class ManageMedicinesForm
             Dim cmd As New SqlCommand(query, con)
             cmd.Parameters.AddWithValue("@name", txtName.Text)
             cmd.Parameters.AddWithValue("@cat", txtCategory.Text)
-            cmd.Parameters.AddWithValue("@price", txtPrice.Text)
-            cmd.Parameters.AddWithValue("@qty", txtQuantity.Text)
+            cmd.Parameters.AddWithValue("@price", Convert.ToDecimal(txtPrice.Text))
+            cmd.Parameters.AddWithValue("@qty", Convert.ToInt32(txtQuantity.Text))
             cmd.Parameters.AddWithValue("@img", txtImage.Text)
 
             cmd.ExecuteNonQuery()
 
-            '  HISTORY LOG
+            ' HISTORY LOG
             LogHistory(LoginForm.CurrentAdminID, "Add", "Added Medicine: " & txtName.Text)
 
             MessageBox.Show("Medicine Added Successfully")
@@ -297,14 +327,14 @@ Public Class ManageMedicinesForm
             Dim cmd As New SqlCommand(query, con)
             cmd.Parameters.AddWithValue("@name", txtName.Text)
             cmd.Parameters.AddWithValue("@cat", txtCategory.Text)
-            cmd.Parameters.AddWithValue("@price", txtPrice.Text)
-            cmd.Parameters.AddWithValue("@qty", txtQuantity.Text)
+            cmd.Parameters.AddWithValue("@price", Convert.ToDecimal(txtPrice.Text))
+            cmd.Parameters.AddWithValue("@qty", Convert.ToInt32(txtQuantity.Text))
             cmd.Parameters.AddWithValue("@img", txtImage.Text)
             cmd.Parameters.AddWithValue("@id", id)
 
             cmd.ExecuteNonQuery()
 
-            ' 🔥 HISTORY LOG
+            ' HISTORY LOG
             LogHistory(LoginForm.CurrentAdminID, "Update", "Updated Medicine: " & txtName.Text)
 
             MessageBox.Show("Medicine Updated")
@@ -335,7 +365,7 @@ Public Class ManageMedicinesForm
 
             cmd.ExecuteNonQuery()
 
-            '  HISTORY LOG
+            ' HISTORY LOG
             LogHistory(LoginForm.CurrentAdminID, "Delete", "Deleted Medicine ID: " & id)
 
             MessageBox.Show("Medicine Deleted")

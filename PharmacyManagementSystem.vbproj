@@ -104,6 +104,18 @@
     <Compile Include="AdminDashboard.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="BillForm.Designer.vb">
+      <DependentUpon>BillForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="BillForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CartForm.Designer.vb">
+      <DependentUpon>CartForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CartForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DBConnection.vb" />
     <Compile Include="HistoryForm.Designer.vb">
       <DependentUpon>HistoryForm.vb</DependentUpon>
@@ -140,6 +152,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="PurchaseHistoryForm.Designer.vb">
+      <DependentUpon>PurchaseHistoryForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="PurchaseHistoryForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SignupForm.Designer.vb">
       <DependentUpon>SignupForm.vb</DependentUpon>
     </Compile>
@@ -150,6 +168,18 @@
       <DependentUpon>UserDashboard.vb</DependentUpon>
     </Compile>
     <Compile Include="UserDashboard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserDashboardHome.Designer.vb">
+      <DependentUpon>UserDashboardHome.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserDashboardHome.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewMedicinesForm.Designer.vb">
+      <DependentUpon>ViewMedicinesForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ViewMedicinesForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ViewRequestsForm.Designer.vb">
@@ -166,6 +196,12 @@
     <EmbeddedResource Include="AdminDashboard.resx">
       <DependentUpon>AdminDashboard.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="BillForm.resx">
+      <DependentUpon>BillForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CartForm.resx">
+      <DependentUpon>CartForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="HistoryForm.resx">
       <DependentUpon>HistoryForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -181,11 +217,20 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="PurchaseHistoryForm.resx">
+      <DependentUpon>PurchaseHistoryForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SignupForm.resx">
       <DependentUpon>SignupForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserDashboard.resx">
       <DependentUpon>UserDashboard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserDashboardHome.resx">
+      <DependentUpon>UserDashboardHome.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewMedicinesForm.resx">
+      <DependentUpon>ViewMedicinesForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewRequestsForm.resx">
       <DependentUpon>ViewRequestsForm.vb</DependentUpon>
@@ -215,6 +260,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
